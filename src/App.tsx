@@ -3,6 +3,7 @@ import './App.css'
 import {Route, Routes, useNavigate} from "react-router";
 import Game from "./game.tsx";
 import Logo from "./logo.tsx";
+import type {RowColDimensions} from './types';
 
 const DEFAULT_ROW_COL = 10;
 const MIN_ROW_COL = 4;
@@ -10,10 +11,7 @@ const MAX_ROW_COL = 25;
 
 function App() {
     const navigate = useNavigate();
-    const [rowCols, setRowCols] = useState<{
-        row: number,
-        col: number,
-    }>({row: DEFAULT_ROW_COL, col: DEFAULT_ROW_COL});
+    const [rowCols, setRowCols] = useState<RowColDimensions>({row: DEFAULT_ROW_COL, col: DEFAULT_ROW_COL});
 
     const onChangeValue = (value: number, name: 'row' | 'col') => {
         setRowCols({...rowCols, [name]: value});

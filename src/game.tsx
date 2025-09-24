@@ -1,28 +1,31 @@
 import {type FC, useState} from 'react';
 import Logo from "./logo.tsx";
 import Overlay from "./overlay.tsx";
+import type {BoardCell, SelectedCell, CellPosition, Direction, RowColDimensions} from './types';
 
 const Game: FC<{
-    row: number,
-    col: number,
+    row: number;
+    col: number;
 }> = ({
           col, row
       }) => {
-    const [board, setBoard] = useState<{
-        position: 'width' | 'height',
-        index: number,
-        word: string,
-    }[][]>(Array(row).fill(null).map(() => Array(col).fill("")));
+    const [board, setBoard] = useState<BoardCell[][]>(Array(row).fill(null).map(() => Array(col).fill(null).map(() => ({
+        position: '' as 'width' | 'height' | '',
+        index: 0,
+        word: '',
+        description: ''
+    }))));
     const [isDragging, setIsDragging] = useState(false);
-    const [dragStart, setDragStart] = useState<{ row: number, col: number } | null>(null);
-    const [selectedCells, setSelectedCells] = useState<{
-        position: string,
-        word: string,
-    }[]>([]);
+    const [dragStart, setDragStart] = useState<CellPosition | null>(null);
+    const [selectedCells, setSelectedCells] = useState<SelectedCell[]>([]);
     const [isOverlay, setIsOverlay] = useState(false);
-    const [direction, setDirection] = useState<'' | 'width' | 'height'>('');
+    const [direction, setDirection] = useState<Direction>('');
+    const [order, setOrder] = useState<RowColDimensions>({
+        row: 1,
+        col: 1,
+    });
 
-    const isValidDirection = (start: { row: number, col: number }, end: { row: number, col: number }) => {
+    const isValidDirection = (start: CellPosition, end: CellPosition) => {
         return start.row === end.row || start.col === end.col;
     };
 
@@ -44,18 +47,17 @@ const Game: FC<{
             } else if (dragStart.col === newEnd.col) {
                 setDirection("height");
             }
-            setSelectedCells(prev => [...prev, {
-                position: `${rowIndex}-${colIndex}`,
-                word,
-            }]);
+            if(!selectedCells.map(item => item.position).includes(`${newEnd.row}-${newEnd.col}`)) {
+                setSelectedCells(prev => [...prev, {
+                    position: `${rowIndex}-${colIndex}`,
+                    word,
+                }]);
+            }
         }
     };
 
     const handleMouseUp = () => {
         setIsDragging(false);
-        console.log('선택된 셀들:', Array.from(selectedCells));
-        console.log('이동한 칸 수:', selectedCells.length);
-        // setSelectedCells([]);
         setIsOverlay(true);
     };
 
@@ -66,14 +68,21 @@ const Game: FC<{
                 board.map((row, index) => {
                     return <div className={'flex'} key={index}>{
                         row.map((cell, index_c) => {
+                            let backgroundColor = '#EBEBEB';
                             const cellKey = `${index}-${index_c}`;
                             const isSelected = selectedCells.map(item => item.position).includes(cellKey);
+                            if(isSelected) {
+                                backgroundColor = 'blue'
+                            }
+                            if(cell.word !== "") {
+                                backgroundColor = 'gold';
+                            }
                             return <div
                                 key={index_c}
                                 style={{
-                                    background: isSelected ? 'blue' : '#EBEBEB',
+                                    background: backgroundColor,
                                 }}
-                                className={'bg-[#EBEBEB] hover:!bg-[#BFBFBF] border-white border w-[60px] h-[60px] cursor-pointer'}
+                                className={'bg-[#EBEBEB] hover:!bg-[#BFBFBF] border-white border w-[60px] h-[60px] text-[24px] font-bold leading-[60px] cursor-pointer'}
                                 onMouseDown={() => handleMouseDown(index, index_c, cell.word)}
                                 onMouseEnter={() => handleMouseEnter(index, index_c, cell.word)}
                                 onMouseUp={handleMouseUp}
@@ -87,6 +96,9 @@ const Game: FC<{
         </div>
         {
             isOverlay && <Overlay
+                board={board}
+                order={order}
+                setOrder={setOrder}
                 setBoard={setBoard}
                 direction={direction}
                 setIsOverlay={setIsOverlay}
