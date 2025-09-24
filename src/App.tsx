@@ -1,7 +1,7 @@
 import {useState} from 'react'
 import './App.css'
 import {Route, Routes, useNavigate} from "react-router";
-import Game from "./game.tsx";
+import Setting from "./setting.tsx";
 import Logo from "./logo.tsx";
 import type {RowColDimensions} from './types';
 
@@ -69,7 +69,7 @@ function App() {
                 </div>
                 <button onClick={() => navigate('/game')} className={'mt-[20px] w-[160px] h-[40px] p-[0px]'}>확인</button>
             </>}/>
-            <Route path={"/game"} element={<Game
+            <Route path={"/setting"} element={<Setting
                 row={rowCols.row}
                 col={rowCols.col}
             />}/>
