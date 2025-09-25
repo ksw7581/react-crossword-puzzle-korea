@@ -1,20 +1,17 @@
-import {type FC, useState} from 'react';
+import {type Dispatch, type FC, type SetStateAction, useState} from 'react';
 import Logo from "./logo.tsx";
 import Overlay from "./overlay.tsx";
 import type {BoardCell, SelectedCell, CellPosition, Direction, RowColDimensions} from './types';
+import {produce} from "immer";
+import {useNavigate} from "react-router";
 
 const Setting: FC<{
-    row: number;
-    col: number;
+    board: BoardCell[][],
+    setBoard: Dispatch<SetStateAction<BoardCell[][]>>,
 }> = ({
-          col, row
+          board, setBoard
       }) => {
-    const [board, setBoard] = useState<BoardCell[][]>(Array(row).fill(null).map(() => Array(col).fill(null).map(() => ({
-        position: '' as 'width' | 'height' | '',
-        index: 0,
-        word: '',
-        description: ''
-    }))));
+    const navigate = useNavigate();
     const [isDragging, setIsDragging] = useState(false);
     const [dragStart, setDragStart] = useState<CellPosition | null>(null);
     const [selectedCells, setSelectedCells] = useState<SelectedCell[]>([]);
@@ -24,6 +21,8 @@ const Setting: FC<{
         row: 1,
         col: 1,
     });
+
+    console.log(board);
 
     const isValidDirection = (start: CellPosition, end: CellPosition) => {
         return start.row === end.row || start.col === end.col;
@@ -63,18 +62,23 @@ const Setting: FC<{
 
     const onSubmit = () => {
         if (confirm('제출하면 게임이 시작됩니다.')) {
-
+            navigate('/game');
         }
     };
 
     const onReset = () => {
         if (confirm("초기화 하시겠습니까?")) {
-            setBoard(Array(row).fill(null).map(() => Array(col).fill(null).map(() => ({
-                position: '' as 'width' | 'height' | '',
-                index: 0,
-                word: '',
-                description: ''
-            }))));
+            const resetBoard = produce(board, draft => {
+                for (const row of draft) {
+                    for (const col of row) {
+                        col.position = "";
+                        col.index = 0;
+                        col.word = '';
+                        col.description = '';
+                    }
+                }
+            });
+            setBoard(resetBoard);
             setOrder({
                 row: 1,
                 col: 1,

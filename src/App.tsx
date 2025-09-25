@@ -3,7 +3,8 @@ import './App.css'
 import {Route, Routes, useNavigate} from "react-router";
 import Setting from "./setting.tsx";
 import Logo from "./logo.tsx";
-import type {RowColDimensions} from './types';
+import type {BoardCell, RowColDimensions} from './types';
+import Game from "./game.tsx";
 
 const DEFAULT_ROW_COL = 10;
 const MIN_ROW_COL = 4;
@@ -11,6 +12,12 @@ const MAX_ROW_COL = 25;
 
 function App() {
     const navigate = useNavigate();
+    const [board, setBoard] = useState<BoardCell[][]>(Array(0).fill(null).map(() => Array(0).fill(null).map(() => ({
+        position: '' as 'width' | 'height' | '',
+        index: 0,
+        word: '',
+        description: ''
+    }))));
     const [rowCols, setRowCols] = useState<RowColDimensions>({row: DEFAULT_ROW_COL, col: DEFAULT_ROW_COL});
 
     const onChangeValue = (value: number, name: 'row' | 'col') => {
@@ -67,11 +74,23 @@ function App() {
                             }}/>
                     </div>
                 </div>
-                <button onClick={() => navigate('/game')} className={'mt-[20px] w-[160px] h-[40px] p-[0px]'}>확인</button>
+                <button onClick={() => {
+                    setBoard(Array(rowCols.row).fill(null).map(() => Array(rowCols.col).fill(null).map(() => ({
+                        position: '' as 'width' | 'height' | '',
+                        index: 0,
+                        word: '',
+                        description: ''
+                    }))));
+                    navigate('/setting');
+                }} className={'mt-[20px] w-[160px] h-[40px] p-[0px]'}>확인
+                </button>
             </>}/>
             <Route path={"/setting"} element={<Setting
-                row={rowCols.row}
-                col={rowCols.col}
+                board={board}
+                setBoard={setBoard}
+            />}/>
+            <Route path={"/game"} element={<Game
+                board={board}
             />}/>
         </Routes>
     )
