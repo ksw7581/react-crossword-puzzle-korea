@@ -2,7 +2,7 @@ import Logo from "./logo.tsx";
 import type {FC} from "react";
 import type {BoardCell} from "./types.ts";
 import html2canvas from "html2canvas";
-import {Sample} from "./const TestSample.ts";
+// import {Sample} from "./const TestSample.ts";
 
 const Game: FC<{
     board: BoardCell[][],
@@ -29,7 +29,7 @@ const Game: FC<{
             <Logo/>
             <div className={'flex flex-col items-center mb-[20px]'}>
                 {
-                    Sample.map((row, index) => {
+                    board.map((row, index) => {
                         return <div className={'flex'} key={index}>{
                             row.map((cell, index_c) => {
                                 let backgroundColor = 'navy';
@@ -59,7 +59,7 @@ const Game: FC<{
                 <div className={'mr-[20px] w-[calc(50%_-_20px)]'}>
                     <h2 className={'text-[18px] font-bold'}>가로</h2>
                     {
-                        Sample.map((row, index) => {
+                        board.map((row, index) => {
                             return row.filter(item => item.position === 'width').sort((a, b) => a.index - b.index).map((cell, index_c) => {
                                 return <div className={'text-left'} key={`${index}-${index_c}`}>{cell.index}. {cell.description}</div>
                             });
@@ -69,7 +69,7 @@ const Game: FC<{
                 <div className={'w-[calc(50%_-_20px)]'}>
                     <h2 className={'text-[18px] font-bold'}>세로</h2>
                     {
-                        Sample.map((row, index) => {
+                        board.map((row, index) => {
                             return row.filter(item => item.position === 'height').sort((a, b) => a.index - b.index).map((cell, index_c) => {
                                 return <div className={'text-left'} key={`${index}-${index_c}`}>{cell.index}. {cell.description}</div>
                             });
