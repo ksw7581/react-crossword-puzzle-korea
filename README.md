@@ -1,69 +1,16 @@
-# React + TypeScript + Vite
+# 🧩 React CrossWord Puzzle
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+🌺 **가로 세로 문제를 만들고** `공유하기` 버튼을 누르면 *다운로드해서 공유*하면 됩니다.
 
-Currently, two official plugins are available:
+> ### 🚀 기술 스택
+> - **React** + **Tailwind CSS** + **Vite**
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 💬 어쩌다 개발하게 되었나요?
 
-## Expanding the ESLint configuration
+**가로세로 낱말퍼즐** 리액트로 된 오픈소스가 없길래, 시간도 좀 남겠다 만들게 되었습니다.
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## 🗓️ 향후 개발 계획은?
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
-
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+- [ ] **반응형 개발**
+- [ ] **카카오톡 공유**
+- [ ] **이것저것 개선 가능한 거 있으면 개선**
